@@ -1,5 +1,5 @@
 <?php
-require_once './connexion.php';
+require_once __DIR__ . '/../connexion.php';
 
 function isLoggedIn() {
     return isset($_SESSION['user_id']);
