@@ -15,7 +15,7 @@ CREATE TABLE articles (
     slug VARCHAR(255) UNIQUE NOT NULL, -- Utilisé pour les URL propres
     resume TEXT,
     contenu TEXT NOT NULL,
-    image_url VARCHAR(255),
+    image_url TEXT,
     image_alt VARCHAR(150), -- Important pour ton point SEO (balise alt)
     meta_title VARCHAR(70),  -- Pour le SEO
     meta_description VARCHAR(160), -- Pour le SEO
