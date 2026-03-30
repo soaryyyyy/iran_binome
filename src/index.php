@@ -1,12 +1,9 @@
 <?php
-$host = 'postgres';
-$db = 'mon_db';
-$user = 'user';
-$password = 'password';
+require_once 'connexion.php';
 
-try {
-    $pdo = new PDO("pgsql:host=$host;dbname=$db", $user, $password);
-    echo "Connexion réussie à PostgreSQL 🚀";
-} catch (PDOException $e) {
-    echo "Erreur : " . $e->getMessage();
+$stmt = $pdo->query("SELECT * FROM users");
+$users = $stmt->fetchAll();
+
+foreach ($users as $user) {
+    echo $user['username'];
 }
