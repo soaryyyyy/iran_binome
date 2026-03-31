@@ -1,3 +1,7 @@
+<?php
+$backofficeRobots = isLocalRequest() ? 'index, follow' : 'noindex, nofollow';
+$canonicalUrl = getCurrentUrl();
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -5,7 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($pageTitle ?? 'Backoffice') ?> — Administration</title>
     <meta name="description" content="Interface d'administration du site Iran Actualités.">
-    <meta name="robots" content="noindex, nofollow">
+    <meta name="robots" content="<?= htmlspecialchars($backofficeRobots) ?>">
+    <link rel="canonical" href="<?= htmlspecialchars($canonicalUrl) ?>">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 

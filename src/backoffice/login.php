@@ -9,6 +9,8 @@ if (isLoggedIn()) {
 }
 
 $erreur = '';
+$backofficeRobots = isLocalRequest() ? 'index, follow' : 'noindex, nofollow';
+$canonicalUrl = getCurrentUrl();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username'] ?? '');
@@ -36,7 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion - Backoffice</title>
     <meta name="description" content="Page de connexion à l'interface d'administration.">
-    <meta name="robots" content="noindex, nofollow">
+    <meta name="robots" content="<?= htmlspecialchars($backofficeRobots) ?>">
+    <link rel="canonical" href="<?= htmlspecialchars($canonicalUrl) ?>">
     <style>
         * {
             margin: 0;
