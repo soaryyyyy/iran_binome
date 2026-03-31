@@ -1,6 +1,11 @@
 Options -Indexes
 RewriteEngine On
 
+# Ne pas rewriter les vrais fichiers/dossiers
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
 # Rediriger vers HTTPS (décommenter en production)
 # RewriteCond %{HTTPS} off
 # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
@@ -9,6 +14,8 @@ RewriteEngine On
 
 # Page d'accueil
 RewriteRule ^$ index.php [L]
+RewriteRule ^robots\.txt$ robots.php [L]
+RewriteRule ^sitemap\.xml$ sitemap.php [L]
 
 # Article : /article/mon-slug
 RewriteRule ^article/([a-z0-9\-]+)/?$ frontoffice/article.php?slug=$1 [L,QSA]
@@ -21,6 +28,7 @@ RewriteRule ^categorie/([a-z0-9\-]+)/?$ frontoffice/categorie.php?slug=$1 [L,QSA
 # Backoffice login
 RewriteRule ^backoffice/?$ backoffice/login.php [L]
 RewriteRule ^backoffice/login/?$ backoffice/login.php [L]
+RewriteRule ^backoffice/logout/?$ backoffice/logout.php [L]
 RewriteRule ^backoffice/dashboard/?$ backoffice/dashboard.php [L]
 RewriteRule ^backoffice/articles/?$ backoffice/articles.php [L]
 RewriteRule ^backoffice/article/nouveau/?$ backoffice/article_form.php [L]
