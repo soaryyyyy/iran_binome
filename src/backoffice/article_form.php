@@ -301,29 +301,34 @@ include 'layout_header.php';
 
 </form>
 
-<!-- TinyMCE (CDN gratuit) -->
-<script src="https://cdn.tiny.cloud/1/4lxys6uu2xnsoj6kk8a2afoztd0mxdml1zps1gp1eooum9x5/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="/assets/tinymce/tinymce.min.js" defer></script>
 <script>
-tinymce.init({
-    selector: '#contenu',
-    language: 'fr_FR',
-    height: 500,
-    plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-    toolbar: 'undo redo | blocks fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-    content_style: 'body { font-family: Georgia, serif; font-size: 16px; line-height: 1.7; max-width: 800px; margin: 20px auto; }',
-    promotion: false,
-    branding: false,
-    setup: function (editor) {
-        editor.on('submit', function () {
-            editor.save();
-        });
+function initTinyMce() {
+    if (!window.tinymce) {
+        return;
+    }
+
+    window.tinymce.init({
+        selector: '#contenu',
+        base_url: '/assets/tinymce',
+        suffix: '.min',
+        license_key: 'gpl',
+        height: 500,
+        plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+        toolbar: 'undo redo | blocks fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+        content_style: 'body { font-family: Georgia, serif; font-size: 16px; line-height: 1.7; max-width: 800px; margin: 20px auto; }',
+        promotion: false,
+        branding: false
+    });
+}
+
+document.querySelector('form').addEventListener('submit', function () {
+    if (window.tinymce) {
+        window.tinymce.triggerSave();
     }
 });
 
-// Synchroniser TinyMCE avant l'envoi du formulaire
-document.querySelector('form').addEventListener('submit', function () {
-    tinymce.triggerSave();
-});
+window.addEventListener('load', initTinyMce);
 
 // Génération automatique du slug depuis le titre
 function genererSlug() {
