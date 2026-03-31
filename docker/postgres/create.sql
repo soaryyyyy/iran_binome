@@ -15,12 +15,13 @@ CREATE TABLE articles (
     slug VARCHAR(255) UNIQUE NOT NULL, -- Utilisé pour les URL propres
     resume TEXT,
     contenu TEXT NOT NULL,
-    image_url VARCHAR(255),
+    image_url TEXT,
     image_alt VARCHAR(150), -- Important pour ton point SEO (balise alt)
     meta_title VARCHAR(70),  -- Pour le SEO
     meta_description VARCHAR(160), -- Pour le SEO
     date_publication TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     is_published BOOLEAN DEFAULT FALSE,
+    is_featured  BOOLEAN DEFAULT FALSE,
     category_id INTEGER REFERENCES categories(id) ON DELETE SET NULL,
     author_id INTEGER REFERENCES users(id)
 );
