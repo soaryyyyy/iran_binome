@@ -267,7 +267,7 @@ $homeUrl = buildAbsoluteUrl('/');
 
     <footer>
         <p>&copy; <?= date('Y') ?> Iran Actualités &mdash;
-            <a href="/backoffice">Administration</a>
+            <!-- <a href="/backoffice/login">Administration</a> -->
         </p>
     </footer>
 
