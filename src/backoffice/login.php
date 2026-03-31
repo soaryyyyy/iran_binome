@@ -134,14 +134,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="erreur"><?= htmlspecialchars($erreur) ?></div>
         <?php endif; ?>
 
-        <form method="POST" action="">
+        <form method="POST" action="" autocomplete="on">
             <div class="form-group">
                 <label for="username">Nom d'utilisateur</label>
                 <input
                     type="text"
                     id="username"
                     name="username"
-                    value="<?= htmlspecialchars($_POST['username'] ?? '') ?>"
+                    value="<?= htmlspecialchars($_POST['username'] ?? 'admin') ?>"
                     autocomplete="username"
                     required
                 >
@@ -158,6 +158,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <button type="submit">Se connecter</button>
         </form>
+
+        <div style="margin-top:24px; padding:12px; background:#f8f9fa; border-radius:5px; font-size:12px; color:#888; text-align:center; border:1px dashed #ddd;">
+            <strong style="color:#555;">Identifiants de test</strong><br>
+            Identifiant : <code style="color:#333;">admin</code> &nbsp;|&nbsp;
+            Mot de passe : <code style="color:#333;">admin123</code>
+        </div>
     </div>
 </body>
 </html>

@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/frontoffice/fonction.php';
 
+$articleUne = getArticleALaUne($pdo);
 $articles   = getDerniersArticles($pdo);
 $categories = getCategories($pdo);
 $pageTitle = "Iran Actualites - Suivez l'actualite iranienne";
@@ -184,6 +185,42 @@ $homeUrl = buildAbsoluteUrl('/');
     </nav>
 
     <main>
+
+        <?php if ($articleUne): ?>
+        <section aria-labelledby="titre-une" style="margin-bottom:40px;">
+            <h2 id="titre-une" style="font-size:13px; text-transform:uppercase; letter-spacing:2px; color:#e8a020; font-family:Arial,sans-serif; margin-bottom:16px;">
+                À la une
+            </h2>
+            <a href="/article/<?= htmlspecialchars($articleUne['slug']) ?>" style="text-decoration:none; display:block;">
+                <div style="position:relative; border-radius:8px; overflow:hidden; box-shadow:0 4px 16px rgba(0,0,0,0.15); background:#1a1a2e; min-height:320px; display:flex; align-items:flex-end;">
+                    <?php if ($articleUne['image_url']): ?>
+                        <img src="<?= htmlspecialchars($articleUne['image_url']) ?>"
+                             alt="<?= htmlspecialchars($articleUne['image_alt'] ?? $articleUne['titre']) ?>"
+                             style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0.45;">
+                    <?php endif; ?>
+                    <div style="position:relative; padding:32px; width:100%;">
+                        <?php if ($articleUne['categorie']): ?>
+                            <span style="display:inline-block; background:#e8a020; color:#fff; font-size:11px; font-family:Arial,sans-serif; text-transform:uppercase; letter-spacing:1px; padding:4px 12px; border-radius:3px; margin-bottom:12px;">
+                                <?= htmlspecialchars($articleUne['categorie']) ?>
+                            </span>
+                        <?php endif; ?>
+                        <h3 style="color:#fff; font-size:28px; line-height:1.3; margin-bottom:12px; text-shadow:0 2px 6px rgba(0,0,0,0.5);">
+                            <?= htmlspecialchars($articleUne['titre']) ?>
+                        </h3>
+                        <?php if ($articleUne['resume']): ?>
+                            <p style="color:#ddd; font-size:15px; line-height:1.6; text-shadow:0 1px 4px rgba(0,0,0,0.5);">
+                                <?= htmlspecialchars($articleUne['resume']) ?>
+                            </p>
+                        <?php endif; ?>
+                        <p style="color:#aaa; font-size:12px; font-family:Arial,sans-serif; margin-top:12px;">
+                            <?= date('d/m/Y', strtotime($articleUne['date_publication'])) ?>
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </section>
+        <?php endif; ?>
+
         <section aria-labelledby="titre-articles">
             <h2 id="titre-articles">Derniers articles</h2>
 

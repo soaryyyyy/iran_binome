@@ -16,6 +16,19 @@ function buildAbsoluteUrl(string $path = '/'): string
     return rtrim(getBaseUrl(), '/') . '/' . ltrim($path, '/');
 }
 
+function getArticleALaUne(PDO $pdo): array|false
+{
+    return $pdo->query("
+        SELECT a.titre, a.slug, a.resume, a.image_url, a.image_alt, a.date_publication,
+               c.nom AS categorie, c.slug AS categorie_slug
+        FROM articles a
+        LEFT JOIN categories c ON a.category_id = c.id
+        WHERE a.is_featured = TRUE AND a.is_published = TRUE
+        ORDER BY a.date_publication DESC
+        LIMIT 1
+    ")->fetch();
+}
+
 function getCategories(PDO $pdo): array
 {
     return $pdo->query("SELECT * FROM categories ORDER BY nom ASC")->fetchAll();

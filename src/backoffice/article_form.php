@@ -36,7 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $meta_title       = trim($_POST['meta_title'] ?? '');
     $meta_description = trim($_POST['meta_description'] ?? '');
     $category_id      = !empty($_POST['category_id']) ? (int) $_POST['category_id'] : null;
-    $is_published     = isset($_POST['is_published']) ? true : false;
+    $is_published     = isset($_POST['is_published']) ? 'true' : 'false';
+    $is_featured      = isset($_POST['is_featured'])  ? 'true' : 'false';
 
     // Validation
     if (empty($titre) || empty($slug) || empty($contenu)) {
@@ -56,7 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         meta_title = :meta_title,
                         meta_description = :meta_description,
                         category_id = :category_id,
-                        is_published = :is_published
+                        is_published = :is_published,
+                        is_featured  = :is_featured
                     WHERE id = :id
                 ");
                 $stmt->execute([
@@ -70,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'meta_description' => $meta_description ?: null,
                     'category_id'      => $category_id,
                     'is_published'     => $is_published,
+                    'is_featured'      => $is_featured,
                     'id'               => $id,
                 ]);
                 $succes = "Article mis à jour avec succès.";
@@ -81,9 +84,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Création
                 $stmt = $pdo->prepare("
                     INSERT INTO articles
-                        (titre, slug, resume, contenu, image_url, image_alt, meta_title, meta_description, category_id, is_published, author_id)
+                        (titre, slug, resume, contenu, image_url, image_alt, meta_title, meta_description, category_id, is_published, is_featured, author_id)
                     VALUES
-                        (:titre, :slug, :resume, :contenu, :image_url, :image_alt, :meta_title, :meta_description, :category_id, :is_published, :author_id)
+                        (:titre, :slug, :resume, :contenu, :image_url, :image_alt, :meta_title, :meta_description, :category_id, :is_published, :is_featured, :author_id)
                 ");
                 $stmt->execute([
                     'titre'            => $titre,
@@ -96,6 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'meta_description' => $meta_description ?: null,
                     'category_id'      => $category_id,
                     'is_published'     => $is_published,
+                    'is_featured'      => $is_featured,
                     'author_id'        => $_SESSION['user_id'],
                 ]);
                 $newId = $pdo->lastInsertId();
@@ -126,6 +130,9 @@ $v = [
     'is_published'     => isset($_POST['is_published'])
                             ? true
                             : ($article['is_published'] ?? false),
+    'is_featured'      => isset($_POST['is_featured'])
+                            ? true
+                            : ($article['is_featured'] ?? false),
 ];
 
 include 'layout_header.php';
@@ -239,6 +246,13 @@ include 'layout_header.php';
                            <?= $v['is_published'] ? 'checked' : '' ?>
                            style="width:18px; height:18px;">
                     <span style="font-size:14px;">Publier l'article</span>
+                </label>
+
+                <label style="display:flex; align-items:center; gap:10px; cursor:pointer; margin-bottom:20px;">
+                    <input type="checkbox" name="is_featured" value="1"
+                           <?= $v['is_featured'] ? 'checked' : '' ?>
+                           style="width:18px; height:18px; accent-color:#e8a020;">
+                    <span style="font-size:14px;">⭐ À la une <span style="font-size:11px; color:#aaa;">(affiché en haut de l'accueil)</span></span>
                 </label>
 
                 <button type="submit" class="btn btn-success" style="width:100%;">

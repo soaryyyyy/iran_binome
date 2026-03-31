@@ -21,6 +21,7 @@ CREATE TABLE articles (
     meta_description VARCHAR(160), -- Pour le SEO
     date_publication TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     is_published BOOLEAN DEFAULT FALSE,
+    is_featured  BOOLEAN DEFAULT FALSE,
     category_id INTEGER REFERENCES categories(id) ON DELETE SET NULL,
     author_id INTEGER REFERENCES users(id)
 );
