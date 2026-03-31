@@ -23,6 +23,7 @@ $articlesLies = $article['category_id']
 
 $metaTitle = htmlspecialchars($article['meta_title'] ?: $article['titre']);
 $metaDesc  = htmlspecialchars($article['meta_description'] ?: $article['resume'] ?: '');
+$canonicalUrl = getCurrentUrl();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -33,15 +34,39 @@ $metaDesc  = htmlspecialchars($article['meta_description'] ?: $article['resume']
     <title><?= $metaTitle ?> - Iran Actualités</title>
     <meta name="description" content="<?= $metaDesc ?>">
     <meta name="robots" content="index, follow">
+    <link rel="canonical" href="<?= htmlspecialchars($canonicalUrl) ?>">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:title" content="<?= $metaTitle ?>">
     <meta property="og:description" content="<?= $metaDesc ?>">
+    <meta property="og:url" content="<?= htmlspecialchars($canonicalUrl) ?>">
+    <meta property="og:site_name" content="<?= htmlspecialchars(getSiteName()) ?>">
     <?php if ($article['image_url']): ?>
     <meta property="og:image" content="<?= htmlspecialchars($article['image_url']) ?>">
     <?php endif; ?>
     <meta property="og:locale" content="fr_FR">
+    <meta name="twitter:card" content="<?= $article['image_url'] ? 'summary_large_image' : 'summary' ?>">
+
+    <script type="application/ld+json">
+    <?= json_encode(array_filter([
+        '@context' => 'https://schema.org',
+        '@type' => 'NewsArticle',
+        'headline' => trim(strip_tags($article['titre'])),
+        'description' => trim(strip_tags(html_entity_decode($metaDesc, ENT_QUOTES, 'UTF-8'))),
+        'datePublished' => !empty($article['date_publication']) ? date(DATE_ATOM, strtotime($article['date_publication'])) : null,
+        'dateModified' => !empty($article['date_publication']) ? date(DATE_ATOM, strtotime($article['date_publication'])) : null,
+        'articleSection' => $article['categorie'] ?? null,
+        'mainEntityOfPage' => $canonicalUrl,
+        'url' => $canonicalUrl,
+        'image' => $article['image_url'] ?: null,
+        'inLanguage' => 'fr-FR',
+        'publisher' => [
+            '@type' => 'Organization',
+            'name' => getSiteName(),
+        ],
+    ]), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>
+    </script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }

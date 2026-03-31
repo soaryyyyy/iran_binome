@@ -1,6 +1,21 @@
 <?php
 require_once __DIR__ . '/../connexion.php';
 
+function getSiteName(): string
+{
+    return 'Iran Actualites';
+}
+
+function getDefaultMetaDescription(): string
+{
+    return "Retrouvez toute l'actualite sur l'Iran : politique, economie, societe, culture. Articles fiables et mis a jour regulierement.";
+}
+
+function buildAbsoluteUrl(string $path = '/'): string
+{
+    return rtrim(getBaseUrl(), '/') . '/' . ltrim($path, '/');
+}
+
 function getCategories(PDO $pdo): array
 {
     return $pdo->query("SELECT * FROM categories ORDER BY nom ASC")->fetchAll();
@@ -74,4 +89,14 @@ function getArticlesLies(PDO $pdo, int $categoryId, string $excludeSlug, int $li
     $stmt->bindValue('limit', $limit, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetchAll();
+}
+
+function getPublishedArticlesForSitemap(PDO $pdo): array
+{
+    return $pdo->query("
+        SELECT slug, date_publication
+        FROM articles
+        WHERE is_published = TRUE
+        ORDER BY date_publication DESC
+    ")->fetchAll();
 }

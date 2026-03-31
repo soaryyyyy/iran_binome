@@ -21,6 +21,7 @@ $articles   = getArticlesParCategorie($pdo, $slug);
 
 $metaTitle = htmlspecialchars($categorie['nom']) . ' - Iran Actualités';
 $metaDesc  = 'Tous les articles sur ' . htmlspecialchars($categorie['nom']) . ' concernant l\'Iran.';
+$canonicalUrl = getCurrentUrl();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -31,12 +32,27 @@ $metaDesc  = 'Tous les articles sur ' . htmlspecialchars($categorie['nom']) . ' 
     <title><?= $metaTitle ?></title>
     <meta name="description" content="<?= $metaDesc ?>">
     <meta name="robots" content="index, follow">
+    <link rel="canonical" href="<?= htmlspecialchars($canonicalUrl) ?>">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="<?= $metaTitle ?>">
     <meta property="og:description" content="<?= $metaDesc ?>">
+    <meta property="og:url" content="<?= htmlspecialchars($canonicalUrl) ?>">
+    <meta property="og:site_name" content="<?= htmlspecialchars(getSiteName()) ?>">
     <meta property="og:locale" content="fr_FR">
+    <meta name="twitter:card" content="summary">
+
+    <script type="application/ld+json">
+    <?= json_encode([
+        '@context' => 'https://schema.org',
+        '@type' => 'CollectionPage',
+        'name' => trim(strip_tags($metaTitle)),
+        'description' => trim(strip_tags($metaDesc)),
+        'url' => $canonicalUrl,
+        'inLanguage' => 'fr-FR',
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>
+    </script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }

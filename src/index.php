@@ -3,6 +3,10 @@ require_once __DIR__ . '/frontoffice/fonction.php';
 
 $articles   = getDerniersArticles($pdo);
 $categories = getCategories($pdo);
+$pageTitle = "Iran Actualites - Suivez l'actualite iranienne";
+$metaDescription = getDefaultMetaDescription();
+$canonicalUrl = getCurrentUrl();
+$homeUrl = buildAbsoluteUrl('/');
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -13,13 +17,27 @@ $categories = getCategories($pdo);
     <title>Iran Actualités - Suivez l'actualité iranienne</title>
     <meta name="description" content="Retrouvez toute l'actualité sur l'Iran : politique, économie, société, culture. Articles fiables et mis à jour régulièrement.">
     <meta name="robots" content="index, follow">
+    <link rel="canonical" href="<?= htmlspecialchars($canonicalUrl) ?>">
     <meta name="author" content="Iran Actualités">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
+    <meta property="og:url" content="<?= htmlspecialchars($canonicalUrl) ?>">
+    <meta property="og:site_name" content="<?= htmlspecialchars(getSiteName()) ?>">
     <meta property="og:title" content="Iran Actualités - Suivez l'actualité iranienne">
     <meta property="og:description" content="Retrouvez toute l'actualité sur l'Iran : politique, économie, société, culture.">
     <meta property="og:locale" content="fr_FR">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <script type="application/ld+json">
+    <?= json_encode([
+        '@context' => 'https://schema.org',
+        '@type' => 'WebSite',
+        'name' => getSiteName(),
+        'url' => $homeUrl,
+        'inLanguage' => 'fr-FR',
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>
+    </script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
